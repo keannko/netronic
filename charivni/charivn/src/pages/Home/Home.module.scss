@@ -1,0 +1,115 @@
+.mainScreenWrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 140px 0 0 120px;
+  padding-bottom: 130px;
+  position: relative;
+}
+
+@media (max-width: 1473px) {
+  .mainScreenWrapper {
+    align-items: center;
+    margin: 140px 0 0 0;
+  }
+}
+
+@media (max-width: 857px) {
+  .mainScreenWrapper {
+    padding-bottom: 50px;
+  }
+}
+
+.mainScreenWrapper_title {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 96px;
+  line-height: 115.2px;
+  color: #414141;
+  &_hide {
+    font-family: "Gilroy";
+    font-weight: 700;
+    font-size: 80px;
+    line-height: 115.2px;
+    color: #414141;
+    display: none;
+    margin-top: 530px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1473px) {
+  .mainScreenWrapper_title {
+    display: none;
+  }
+  .mainScreenWrapper_title_hide {
+    display: flex;
+  }
+}
+@media (max-width: 855px) {
+  .mainScreenWrapper_title_hide {
+    font-size: 60px;
+  }
+}
+@media (max-width: 631px) {
+  .mainScreenWrapper_title_hide {
+    font-size: 40px;
+    line-height: 48px;
+    margin-top: 600px;
+    text-align: center;
+  }
+}
+
+.mainScreenWrapper_subtitle {
+  font-family: "Gilroy";
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30.6px;
+  color: #94797e;
+  margin-top: 76px;
+}
+
+@media (max-width: 1473px) {
+  .mainScreenWrapper_subtitle {
+    margin-top: 20px;
+  }
+}
+@media (max-width: 631px) {
+  .mainScreenWrapper_subtitle {
+    text-align: center;
+  }
+}
+
+.mainScreenWrapper_buttonsBlock {
+  display: flex;
+  gap: 20px;
+  margin-top: 76px;
+}
+
+@media (max-width: 1473px) {
+  .mainScreenWrapper_buttonsBlock {
+    margin-top: 40px;
+  }
+}
+@media (max-width: 660px) {
+  .mainScreenWrapper_buttonsBlock {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.mainScreenWrapper_button {
+  font-family: "Gilroy";
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0.03em;
+  padding: 18px 40px;
+  border: 1px solid #e77584;
+  border-radius: 16px;
+  color: #e77584;
+  cursor: pointer;
+}
+
+.firstButton {
+  background-color: #e77584;
+  color: #fff;
+}

@@ -1,0 +1,81 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  gap: 10px;
+}
+
+.form_input {
+  display: flex;
+  flex-direction: column;
+  font-family: "Gilroy";
+  font-size: 18px;
+  font-weight: 500;
+  color: #605f5f;
+  width: 500px;
+  height: 90px;
+  &_label {
+    margin-bottom: 10px;
+  }
+  &_text {
+    font-family: "Gilroy";
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #b69292;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: #f9f1f3;
+    border: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .form_input {
+    width: 320px;
+  }
+}
+
+.error {
+  color: red;
+  font-family: "Gilroy";
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.buttonsBlock {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 160px 0;
+  &_button1 {
+    color: #e77584;
+    font-family: Gilroy;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+  }
+  &_button2 {
+    color: #fff;
+    font-family: Gilroy;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.9px;
+    border-radius: 16px;
+    border: navajowhite;
+    background-color: #e77584;
+    padding: 16px 32px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 520px) {
+  .buttonsBlock {
+    margin: 10px 0 50px 0;
+    &_button2 {
+      padding: 8px 15px;
+    }
+  }
+}

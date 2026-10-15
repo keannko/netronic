@@ -1,0 +1,216 @@
+.helpPageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.helpPage_title {
+  font-family: "Gilroy";
+  font-size: 64px;
+  line-height: 68px;
+  font-weight: 700;
+  color: #605f5f;
+  margin-top: 80px;
+  &::after {
+    content: url("/HelpPage/banka.svg");
+    vertical-align: middle;
+    margin-left: 12px;
+  }
+}
+
+@media (max-width: 1332px) {
+.helpPage_title {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  font-size: 28px;
+  line-height: 32px;
+}
+}
+
+.helpPage_infoBlock {
+  display: flex;
+  background-color: #f9f1f3;
+  margin: 60px 0 160px 0;
+  font-family: Gilroy;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #8a8585;
+  max-width: 1360px;
+  border-radius: 24px;
+  padding: 56px 56px 0 56px;
+  gap: 80px;
+}
+
+@media (max-width: 1332px) {
+  .helpPage_infoBlock {
+    flex-direction: column;
+    background-color: white;
+    gap: 32px;
+    margin-top: 0;
+  }
+}
+
+.infoBlock_item {
+  max-width: 336px;
+  &_paymentData {
+    font-family: Gilroy;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 1.28px;
+    color: #e77584;
+    margin-bottom: 28px;
+  }
+  &_data {
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  &_infoText {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+}
+
+@media (max-width: 1332px) {
+  .infoBlock_item {
+  &_paymentData {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0.96px;
+    margin-bottom: 28px;
+  }
+  &_infoText {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+}
+}
+
+.infoBlock_item_title {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #d5b3b9;
+  color: #605f5f;
+}
+
+.colorStyle {
+  color: #605f5f;
+  margin-bottom: 20px;
+}
+
+.marginAdd {
+  margin-bottom: 54px;
+}
+
+@media (max-width: 1332px) {
+  .firstItem {
+    background-color: #f9f1f3;
+    border-radius: 24px;
+    padding: 16px;
+    text-align: center;
+  }
+}
+
+.secondItem {
+  max-width: 334px;
+}
+
+@media (max-width: 1332px) {
+  .secondItem {
+    background-color: #f9f1f3;
+    border-radius: 24px;
+    padding: 16px;
+    text-align: center;
+  }
+}
+
+.thirdItem {
+  max-width: 380px;
+}
+
+@media (max-width: 1332px) {
+  .thirdItem {
+    display: none;
+  }
+}
+
+.addTitleImg::after {
+  content: url("/HelpPage/logo_private.svg");
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.qrBlock {
+  display: flex;
+  gap: 40px;
+  &_img {
+    padding: 16px;
+    background-color: white;
+    border-radius: 16px;
+  }
+  &_list {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    list-style: none;
+    position: relative;
+  }
+  &_listItem {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 120%;
+    &_first::before {
+      content: "1";
+      position: absolute;
+      left: -30px;
+      border-radius: 50%;
+      padding: 3px 8px;
+      background-color: #e77584;
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 120%;
+    }
+    &_second::before {
+      content: "2";
+      position: absolute;
+      left: -30px;
+      border-radius: 50%;
+      padding: 3px 8px;
+      background-color: #e77584;
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 120%;
+    }
+    &_third::before {
+      content: "3";
+      position: absolute;
+      left: -30px;
+      border-radius: 50%;
+      padding: 3px 8px;
+      background-color: #e77584;
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 120%;
+    }
+    &_fourth::before {
+      content: "4";
+      position: absolute;
+      left: -30px;
+      border-radius: 50%;
+      padding: 3px 8px;
+      background-color: #e77584;
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 120%;
+    }
+  }
+}

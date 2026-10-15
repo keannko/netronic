@@ -1,0 +1,90 @@
+.sponsorsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 156px;
+}
+
+.sponsors_title {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 68px;
+  color: #605f5f;
+  text-align: center;
+}
+
+@media (max-width: 904px) {
+  .sponsors_title {
+    font-size: 50px;
+  }
+}
+
+@media (max-width: 690px) {
+  .sponsors_title {
+    font-size: 36px;
+    line-height: 46px;
+  }
+}
+
+@media (max-width: 555px) {
+  .sponsors_title {
+    font-size: 36px;
+    line-height: 46px;
+  }
+}
+
+.sponsors_imgsBlock {
+  display: flex;
+  padding-top: 56px;
+  border-top: 1px solid #f1d6db;
+  margin: 72px 0 160px 0;
+  align-items: center;
+}
+
+@media (max-width: 1078px) {
+  .sponsors_imgsBlock {
+    flex-direction: column;
+    gap: 80px;
+  }
+  .sponsors_imgsBlock span {
+    display: none;
+  }
+}
+
+.sponsors_imgsBlock div {
+  display: flex;
+  justify-content: center;
+  width: 250px;
+}
+
+.leftArrow {
+  content: "";
+  width: 30px;
+  height: 30px;
+  border-left: 1px solid #e77584;
+  border-bottom: 1px solid #e77584;
+  transform: rotate(45deg);
+  cursor: pointer;
+}
+
+.rightArrow {
+  content: "";
+  width: 30px;
+  height: 30px;
+  border-left: 1px solid #e77584;
+  border-bottom: 1px solid #e77584;
+  transform: rotate(225deg);
+  cursor: pointer;
+}
+
+@media (max-width: 1076px) {
+  .sponsors_imgsBlock {
+    gap: 60px;
+  }
+}
+@media (max-width: 878px) {
+  .sponsors_imgsBlock {
+    flex-direction: column;
+  }
+}

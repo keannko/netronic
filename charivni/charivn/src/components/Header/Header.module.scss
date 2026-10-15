@@ -1,0 +1,61 @@
+.headerWrapper {
+  background-color: rgba(242, 241, 243, 0.94);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 53px 60px 48px 120px;
+}
+
+@media (max-width: 767px) {
+  .headerWrapper {
+    padding-left: 20px;
+  }
+}
+
+.headerLogo {
+    position: absolute;
+    cursor: pointer;
+    top: 0; 
+}
+
+.headerList {
+  font-family: 'Gilroy';
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0.03em;
+  color: #414141;
+  display: flex;
+  gap: 72px;
+  list-style-type: none;
+
+  &Item {
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 1188px) {
+  .headerList {
+    gap: 50px;
+  }
+}
+
+@media (max-width: 1070px) {
+  .headerList {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 904px) {
+  .headerListItem {
+    display: none;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.linkToSection {
+  color: #414141;
+}

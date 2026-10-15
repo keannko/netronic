@@ -1,0 +1,62 @@
+.wrapper {
+    margin: 20px;
+    min-height: 80vh;
+}
+
+.backButton {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #605f5f;
+  padding: 5px 15px;
+  margin: 20px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.cabinetSidebar {
+  display: flex;
+  padding-left: 40px;
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 24px;
+  color: #605f5f;
+  cursor: pointer;
+  height: 500px;
+  &_list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-right: 100px;
+    border-right: 3px solid #605f5f;
+    list-style: none;
+    li {
+        &:hover {
+          color: #E77584;
+        }
+      }
+  }
+  &_content {
+    padding-left: 100px;
+  }
+}
+
+.cabinetTitle {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 68px;
+  color: #605f5f;
+  text-align: center;
+  margin-top: 30px;
+}
+
+@media (max-width: 857px) {
+  .cabinetTitle {
+    font-size: 36px;
+    line-height: 46px;
+  }
+}

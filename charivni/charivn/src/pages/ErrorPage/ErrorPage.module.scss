@@ -1,0 +1,21 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+    align-items: center;
+    min-height: 70vh;
+    font-family: "Gilroy";
+    font-weight: 700;
+    font-size: 46px;
+    color: #414141;
+}
+.wrapper p:nth-child(1) {
+    color: red;
+}
+
+@media (max-width: 505px) {
+    .wrapper {
+        font-size: 26px;
+    }
+}

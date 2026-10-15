@@ -1,0 +1,87 @@
+.ourResultsWrapper {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding-top: 180px;
+padding-bottom: 160px;
+}
+
+@media (max-width: 690px) {
+  .ourResultsWrapper {
+    padding-top: 90px;
+  }
+}
+
+.ourResults_title {
+  font-family: 'Gilroy';
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 68px;
+  color: #605F5F;
+  margin-bottom: 95px;
+  text-align: center;
+}
+
+@media (max-width: 904px) {
+  .ourResults_title {
+    font-size: 50px;
+  }
+}
+
+@media (max-width: 690px) {
+  .ourResults_title {
+    font-size: 36px;
+    line-height: 46px;
+  }
+}
+
+@media (max-width: 530px) {
+  .ourResults_title {
+    font-size: 36px;
+    line-height: 46px;
+  }
+}
+
+.ourResults_content {
+  display: flex;
+  justify-content: center;
+  gap: 188px;
+  border-top: 1px solid #F1D6DB;
+  padding-top: 56px;
+}
+
+@media (max-width: 900px) {
+  .ourResults_content {
+    gap: 10px;
+  }
+}
+@media (max-width: 650px) {
+  .ourResults_content {
+    flex-direction: column;
+  }
+}
+
+.ourResults_content_item {
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+}
+
+.ourResults_content_result {
+  font-family: 'Gilroy';
+  font-weight: 700;
+  font-size: 76px;
+  line-height: 80px;
+  color: #E77584;
+  text-align: center;
+}
+
+.ourResults_content_text {
+  font-family: 'Gilroy';
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30px;
+  color: #414141;
+  max-width: 328px;
+  text-align: center;
+}

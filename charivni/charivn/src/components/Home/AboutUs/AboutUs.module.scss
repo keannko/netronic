@@ -1,0 +1,44 @@
+.aboutUsBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+}
+
+
+@media (max-width: 660px) {
+    .aboutUsBlock {
+        padding-top: 50px;
+      }
+}
+
+.aboutUsBlock_title {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 68px;
+  color: #605f5f;
+  text-align: center;
+}
+
+@media (max-width: 857px) {
+  .aboutUsBlock_title {
+    font-size: 36px;
+    line-height: 46px;
+  }
+}
+
+.aboutUsBlock_about {
+  font-family: "Gilroy";
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30px;
+  color: #414141;
+  text-align: center;
+  margin: 56px 0 100px 0;
+}
+
+.aboutUsBlock_img {
+  max-width: 100%;
+  height: auto;
+}

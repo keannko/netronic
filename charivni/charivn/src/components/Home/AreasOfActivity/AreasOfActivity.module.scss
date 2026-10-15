@@ -1,0 +1,96 @@
+.AreasOfActivity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f1f3;
+  margin-top: 160px;
+  padding-bottom: 56px;
+}
+
+.AreasOfActivity_title {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 68px;
+  color: #605f5f;
+  margin-top: 80px;
+  text-align: center;
+}
+
+@media (max-width: 904px) {
+  .AreasOfActivity_title {
+    font-size: 50px;
+  }
+}
+
+@media (max-width: 690px) {
+  .AreasOfActivity_title {
+    font-size: 36px;
+    line-height: 46px;
+  }
+}
+
+.AreasOfActivity_subtitle {
+  font-family: "Gilroy";
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30px;
+  color: #94797e;
+  margin-top: 56px;
+  text-align: center;
+}
+
+@media (max-width: 690px) {
+  .AreasOfActivity_subtitle {
+    font-size: 15px;
+    line-height: 25px;
+  }
+}
+
+.AreasOfActivity_imgsBlock {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+  gap: 67px;
+}
+
+@media (max-width: 1174px) {
+  .AreasOfActivity_imgsBlock {
+    gap: 10px;
+  }
+}
+@media (max-width: 1060px) {
+  .AreasOfActivity_imgsBlock {
+    flex-direction: column;
+    text-align: center;
+    gap: 33px;
+  }
+}
+
+.AreasOfActivity_imgsBlock_item {
+  display: block;
+}
+
+.AreasOfActivity_imgsBlock_title {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 40px;
+  color: #605f5f;
+  margin-top: 70px;
+}
+@media (max-width: 1060px) {
+  .AreasOfActivity_imgsBlock_title {
+    margin-top: 40px;
+  }
+}
+
+.AreasOfActivity_imgsBlock_content {
+  font-family: "Gilroy";
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 30px;
+  color: #414141;
+  max-width: 364px;
+  margin-top: 24px;
+}

@@ -1,0 +1,41 @@
+.productCard {
+  width: 200px; /* Ширина productCard */
+  height: 300px;
+  overflow: hidden;
+  &_img {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    border-radius: 15px;
+  }
+  &_priceBlock {
+    display: flex;
+    justify-content: space-around;
+    font-family: "Gilroy";
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #605f5f;
+    margin-top: 10px;
+  }
+  &_buttonsBlock {
+    display: flex;
+    justify-content: end;
+  }
+  &_button {
+    font-family: "Gilroy";
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #605f5f;
+    padding: 5px 15px;
+    border-radius: 15px;
+    border: none;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+}
+
+
+
+

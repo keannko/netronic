@@ -1,0 +1,68 @@
+.wrapper {
+  min-height: 80vh;
+}
+
+.aboutPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  &_titleBlock {
+    font-family: "Gilroy";
+    font-weight: 700;
+    font-size: 24px;
+    color: #605f5f;
+    margin: 10px;
+    &_title {
+      text-align: center;
+    }
+  }
+
+  &_img {
+    width: 500px;
+    height: auto;
+  }
+  &_content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: "Gilroy";
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 24px;
+    color: #605f5f;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 520px) {
+  .aboutPage_img {
+    width: 320px;
+  }
+  .aboutPage_content {
+    width: 320px;
+  }
+}
+
+// @media (max-width: 690px) {
+//   .shopTitle {
+//     font-size: 36px;
+//     line-height: 46px;
+//   }
+// }
+
+
+
+.aboutPage_titleBlock_button {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #605f5f;
+  padding: 5px 15px;
+  margin: 50px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+}
