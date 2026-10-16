@@ -1,0 +1,51 @@
+.wrapper { min-height: 100svh; display: flex; flex-direction: column; background: #101012; background-image: radial-gradient(ellipse at 0 75%, #321417 0, transparent 55%); color: #fff; font-family: "Gilroy", Arial, sans-serif; border-top: 4px solid #e52529; }
+.header, .content, .footer { width: min(100% - 96px, 1240px); margin: 0 auto; }
+.header { padding: 28px 0; border-bottom: 1px solid #ffffff17; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.logo { width: 187px; height: 44px; }
+.headerActions { display: flex; align-items: center; gap: 28px; font-size: 13px; color: #aaaab0; }
+.logout { background: transparent; color: #fff; padding: 12px 20px; border: 1px solid #ffffff40; font-family: inherit; cursor: pointer; }
+.logout:hover { border-color: #e52529; color: #ff7478; }
+.logout:focus-visible { outline: 2px solid #e52529; outline-offset: 4px; }
+.content { flex: 1; padding: 32px 0 64px; }
+.breadcrumb { font-size: 10px; letter-spacing: 2px; color: #929297; }
+.heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin: 44px 0 36px; }
+.eyebrow, .sectionLabel { font-size: 10px; letter-spacing: 2px; font-weight: 700; color: #d52b32; }
+.heading h1 { font-size: clamp(30px, 3.5vw, 46px); letter-spacing: -1px; margin: 14px 0; }
+.heading h1 span { color: #ed3035; }
+.description { color: #a5a5aa; font-size: 16px; line-height: 1.6; }
+.demoBadge { border: 1px solid #ffffff30; padding: 10px 14px; color: #aaaab0; font-size: 10px; letter-spacing: 2px; white-space: nowrap; }
+.grid { display: grid; grid-template-columns: 340px 1fr; gap: 24px; }
+.profile, .panel, .accounts { padding: 32px; background: #fff; color: #151517; border-top: 3px solid #e52529; }
+.profile h2, .panel h2, .accounts h2 { font-size: 25px; margin: 18px 0 10px; }
+.avatar { display: grid; place-items: center; width: 64px; height: 64px; margin-top: 28px; background: #fae9ea; color: #d9252a; font-size: 28px; font-weight: 700; }
+.profileEmail { font-size: 14px; color: #75757d; overflow-wrap: anywhere; }
+.role { display: inline-block; padding: 7px 10px; margin-top: 18px; background: #f3f3f5; font-size: 12px; }
+.details { border-top: 1px solid #e8e8eb; padding-top: 20px; margin-top: 28px; font-size: 12px; }
+.details div { display: flex; justify-content: space-between; gap: 12px; margin: 12px 0; }
+.details dt { color: #75757d; }
+.active { color: #357252; }
+.panelDescription { color: #75757d; line-height: 1.6; font-size: 14px; max-width: 480px; }
+.placeholder { border: 1px dashed #dcdce0; text-align: center; padding: 32px 20px; margin-top: 28px; }
+.crosshair { color: #d9252a; font-size: 38px; }
+.placeholder h3 { margin: 10px 0; font-size: 18px; }
+.placeholder p, .note { color: #75757d; font-size: 12px; line-height: 1.6; }
+.note { margin-top: 20px; }
+.accounts { margin-top: 24px; }
+.accountsHeading { display: flex; align-items: center; justify-content: space-between; }
+.count { font-size: 32px; color: #d7d7dc; }
+.tableWrapper { overflow-x: auto; margin-top: 18px; }
+.accounts table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; white-space: nowrap; }
+.accounts th { font-weight: 400; color: #75757d; background: #f8f8f9; }
+.accounts th, .accounts td { padding: 16px; border-bottom: 1px solid #e8e8eb; }
+.footer { padding: 24px 0; border-top: 1px solid #ffffff17; display: flex; justify-content: space-between; gap: 20px; font-size: 10px; color: #929297; letter-spacing: 1px; }
+@media (max-width: 800px) {
+  .header, .content, .footer { width: calc(100% - 40px); }
+  .grid { grid-template-columns: 1fr; }
+  .heading { align-items: flex-start; flex-direction: column; margin-top: 32px; }
+  .headerActions { gap: 12px; }
+  .headerActions > span { display: none; }
+  .logo { width: 150px; }
+  .profile, .panel, .accounts { padding: 24px; }
+  .footer { font-size: 8px; }
+  .footer span { text-align: right; max-width: 160px; }
+}

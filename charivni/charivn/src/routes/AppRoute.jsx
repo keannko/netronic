@@ -1,4 +1,4 @@
-import Home from "../pages/Home/Home";
+
 import { Routes, Route } from 'react-router-dom'
 import Layout from "../components/Layout/Layout";
 import HelpPage from "../pages/HelpPage/HelpPAge";
@@ -16,15 +16,18 @@ import ArticlePage from "../pages/ArticlePage/ArticlePage";
 const AppRouter = () => {
   return (
     <Routes>
+      <Route path="/cabinet" element={<CabinetPage />} />
+      <Route path="/" element={<AuthPage />} />
+      <Route path="/auth" element={<AuthPage />} />
       <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
+        
         <Route path="/help" element={<HelpPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<ArticlePage />} />
         <Route path="/questionnaire" element={<QuestionnairePage />} />
         <Route path="/shop" element={<ShopPage />} />
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="/cabinet" element={<CabinetPage />} />
+        
+
         <Route path="/about/:id" element={<AboutPage />} />
         <Route path="*" element={<ErrorPage />} />
       </Route>

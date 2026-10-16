@@ -1,0 +1,82 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import { once } from 'node:events';
+import { app } from './app.js';
+import { getCurrentDate } from './users/services.js';
+import { createWorkdayEntryDataAccess } from './users/dataAccess.js';
+
+test('admin users, reports, birthdays, uploads and employee profile', async () => {
+  const server = app.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const request = (path, token, method = 'GET', body) => fetch(base + path, { method, headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(body ? { 'Content-Type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  const login = async (email, password = '123') => {
+    const response = await request('/users/login', null, 'POST', { email, password });
+    assert.equal(response.status, 200);
+    return (await response.json()).accessToken;
+  };
+  try {
+    const admin = await login('admin@gmail.com');
+    const employee = await login('user1@gmail.com');
+    assert.equal((await request('/admin/timesheet')).status, 401);
+    assert.equal((await request('/admin/timesheet', employee)).status, 403);
+    assert.equal((await request('/admin/users', employee, 'POST', {})).status, 403);
+    assert.equal((await request('/admin/birthdays', employee, 'POST', {})).status, 403);
+    const values = { firstName: 'Іван', lastName: 'Тестовий', email: 'new@gmail.com', password: '456', grade: 2, role: 'user', birthDate: '1990-10-20', phone: '+380671234567' };
+    const created = await request('/admin/users', admin, 'POST', values);
+    assert.equal(created.status, 201);
+    const user = await created.json();
+    assert.equal(user.password, undefined);
+    assert.equal(user.grade, 2);
+    assert.equal((await request('/admin/users', admin, 'POST', values)).status, 409);
+    assert.equal((await request('/admin/users', admin, 'POST', { ...values, email: 'bad@gmail.com', grade: 4 })).status, 400);
+    await login('new@gmail.com', '456');
+    const edited = await request(`/admin/users/${user.userID}`, admin, 'PATCH', { ...values, lastName: 'Оновлений', password: '' });
+    assert.equal(edited.status, 200);
+    assert.equal((await edited.json()).lastName, 'Оновлений');
+    const date = getCurrentDate();
+    const report = await request(`/admin/users/${user.userID}/workday`, admin, 'PUT', { date, hoursWorked: 8, rows: [{ product: '1', process: '1', quantity: 32 }] });
+    assert.equal(report.status, 200);
+    assert.equal((await report.json()).efficiency, 100);
+    const table = await (await request('/admin/timesheet', admin)).json();
+    assert.equal(table.find(item => item.user.userID === user.userID).entries.length, 1);
+    assert.equal(table.find(item => item.user.userID === user.userID).days.find(day => day.date === date).efficiency, 100);
+    // Legacy records may lack a cached percentage: initial GET must calculate it.
+    await createWorkdayEntryDataAccess(user.userID, { date, hoursWorked: 8, rows: [{ product: '1', process: '1', quantity: 16 }], efficiency: null });
+    const reloaded = await (await request('/admin/timesheet', admin)).json();
+    const employeeDays = reloaded.find(item => item.user.userID === user.userID);
+    assert.equal(employeeDays.days.find(day => day.date === date).efficiency, 50);
+    assert.equal(employeeDays.entries[0].efficiency, 50);
+    const again = await (await request('/admin/timesheet', admin)).json();
+    assert.equal(again.find(item => item.user.userID === user.userID).days.find(day => day.date === date).efficiency, 50);
+    assert.equal((await request('/admin/users/missing/workday', admin, 'PUT', { date })).status, 404);
+    let calendar = await (await request('/users/birthdays', employee)).json();
+    assert.ok(calendar.birthdays.some(person => person.userID === user.userID && person.date === '10-20'));
+    assert.equal((await request('/admin/birthdays', admin, 'POST', { name: 'Bad', date: '02-30' })).status, 400);
+    const birthday = await (await request('/admin/birthdays', admin, 'POST', { name: 'Тест', date: '12-25' })).json();
+    assert.equal((await request(`/admin/birthdays/${birthday.userID}`, admin, 'DELETE')).status, 200);
+    assert.equal((await request(`/admin/birthdays/${user.userID}`, admin, 'DELETE')).status, 200);
+    calendar = await (await request('/users/birthdays', employee)).json();
+    assert.ok(!calendar.birthdays.some(person => person.userID === user.userID));
+    const profile = await request('/users/settings', employee, 'PATCH', { email: 'user1@gmail.com', currentPassword: '123', firstName: 'Іван', lastName: 'Новий', birthDate: '1995-06-12', phone: '+380671234567' });
+    assert.equal(profile.status, 200);
+    const session = await profile.json();
+    assert.equal(session.user.lastName, 'Новий');
+    assert.equal(session.user.birthDate, '1995-06-12');
+    assert.equal(session.user.phone, '+380671234567');
+    const form = new FormData();
+    form.append('category', 'РПС');
+    form.append('file', new Blob([Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aZfoAAAAASUVORK5CYII=', 'base64')], { type: 'image/png' }), 'test.png');
+    const uploaded = await fetch(base + '/admin/images', { method: 'POST', headers: { Authorization: `Bearer ${admin}` }, body: form });
+    assert.equal(uploaded.status, 201);
+    const image = await uploaded.json();
+    assert.match(image.source, /^data:image\/png;base64,/);
+    assert.equal((await (await request('/media', session.accessToken)).json()).length, 1);
+    assert.equal((await request(`/admin/images/${image.id}`, session.accessToken, 'DELETE')).status, 403);
+    assert.equal((await request(`/admin/images/${image.id}`, admin, 'DELETE')).status, 200);
+    assert.equal((await (await request('/media', session.accessToken)).json()).length, 0);
+  } finally {
+    server.closeAllConnections();
+    await new Promise(resolve => server.close(resolve));
+  }
+});

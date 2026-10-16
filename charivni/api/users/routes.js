@@ -1,19 +1,19 @@
-import { Router } from "express";
-import authMiddleware from "../middlewares/auth-middleware.js";
-import { createNewUserController, getAllUsersController, getUserByTokenController, getUserController, loginUserController, logoutUserController, refreshController } from "./controlls.js";
-
+import { Router } from 'express';
+import authMiddleware, { adminMiddleware } from '../middlewares/auth-middleware.js';
+import { getAllUsersController, getUserByTokenController, getUserController, loginUserController, logoutUserController, refreshController, updateUserController, getWorkHoursController, getBirthdaysController, getWorkdayEntriesController, createWorkdayEntryController, getWorkdayCatalogController } from './controlls.js';
 
 export const usersRouter = Router();
 
-usersRouter.post("/registration", createNewUserController);
-usersRouter.post("/login", loginUserController);
-usersRouter.post("/logout", logoutUserController);
-usersRouter.get("/refresh", refreshController);
-usersRouter.get("/bytoken", getUserByTokenController);
-usersRouter.get("/:id", authMiddleware, getUserController);
-usersRouter.get("/", authMiddleware, getAllUsersController);
-
-
-
-
-
+usersRouter.post('/registration', (req, res) => res.status(501).json({ message: 'Реєстрацію поки не підключено.' }));
+usersRouter.post('/login', loginUserController);
+usersRouter.post('/logout', logoutUserController);
+usersRouter.get('/refresh', refreshController);
+usersRouter.get('/bytoken', authMiddleware, getUserByTokenController);
+usersRouter.patch('/settings', authMiddleware, updateUserController);
+usersRouter.get('/hours', authMiddleware, getWorkHoursController);
+usersRouter.get('/birthdays', authMiddleware, getBirthdaysController);
+usersRouter.get('/workday-catalog', authMiddleware, getWorkdayCatalogController);
+usersRouter.get('/workdays', authMiddleware, getWorkdayEntriesController);
+usersRouter.post('/workdays', authMiddleware, createWorkdayEntryController);
+usersRouter.get('/:id', authMiddleware, getUserController);
+usersRouter.get('/', authMiddleware, adminMiddleware, getAllUsersController);

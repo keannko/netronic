@@ -1,0 +1,19 @@
+import { Router } from 'express';
+import multer from 'multer';
+import authMiddleware, { adminMiddleware } from '../middlewares/auth-middleware.js';
+import * as controllers from './controlls.js';
+
+export const adminRouter = Router();
+adminRouter.use(authMiddleware, adminMiddleware);
+adminRouter.get('/timesheet', controllers.getTimesheetController);
+adminRouter.post('/users', controllers.createUserController);
+adminRouter.patch('/users/:id', controllers.updateUserController);
+adminRouter.put('/users/:id/workday', controllers.saveWorkdayController);
+adminRouter.post('/birthdays', controllers.createBirthdayController);
+adminRouter.delete('/birthdays/:id', controllers.deleteBirthdayController);
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024, files: 1 } });
+adminRouter.post('/images', upload.single('file'), controllers.uploadImageController);
+adminRouter.delete('/images/:id', controllers.deleteImageController);
+adminRouter.use((error, req, res, next) => res.status(400).json({ message: error.code === 'LIMIT_FILE_SIZE' ? 'Максимальний розмір зображення — 5 МБ.' : 'Не вдалося завантажити зображення.' }));
+export const mediaRouter = Router();
+mediaRouter.get('/', authMiddleware, controllers.getImagesController);

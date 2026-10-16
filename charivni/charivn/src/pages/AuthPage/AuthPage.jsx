@@ -1,36 +1,32 @@
-import { useState } from "react";
 import EnterForm from "../../components/AuthPage/EnterForm/EnterForm";
-import RegistrationForm from "../../components/AuthPage/RegistrationForm/RegistrationForm";
 import s from "./AuthPage.module.scss";
 
 const AuthPage = () => {
-  const [authFormStatus, setAuthFormStatus] = useState('Enter');
-
-  const handleEnterClick = () => {
-    setAuthFormStatus('Enter')
-  }
-
-  const handleRegistrationClick = () => {
-    setAuthFormStatus('Registration')
-  }
-  
   return (
-    <>
-      <div className={s.wrapper}>
-        <div className={s.registrationForm}>
-          <p className={s.registrationForm_title}>Особистий кабінет</p>
-          <div className={s.registrationForm_variants}>
-          <p className={authFormStatus === 'Enter' ? ` ${s.active}` : s.registrationForm_variants_text} onClick={handleEnterClick}>Вхід</p>
-          <p className={authFormStatus === 'Registration' ? `${s.active}` : s.registrationForm_variants_text} onClick={handleRegistrationClick}>Реєстрація</p>
-          </div>
-          <div>
-            {
-              authFormStatus === 'Enter' ? <EnterForm /> : <RegistrationForm formStatus={setAuthFormStatus}/>
-            }
-          </div>
-        </div>
-      </div>
-    </>
+    <div className={s.wrapper}>
+      <header className={s.header}>
+        <a href="/" aria-label="SKIFTECH — головна">
+          <img className={s.logo} src="/images/skiftech-logo.svg" alt="SKIFTECH" />
+        </a>
+        <span className={s.headerLabel}>ОСОБИСТИЙ КАБІНЕТ</span>
+      </header>
+      <main className={s.content}>
+        <section className={s.intro}>
+          <p className={s.eyebrow}><span /> SKIFTECH / PERSONAL ACCOUNT</p>
+          <h1>Технології.<br />Підготовка.<br /><span>Перевага.</span></h1>
+          <p className={s.description}>Ваш простір у системі SKIFTECH.<br />Увійдіть, щоб продовжити роботу.</p>
+          <div className={s.brandLine}><span /> ГОТОВНІСТЬ ПОЧИНАЄТЬСЯ З ПІДГОТОВКИ</div>
+        </section>
+        <section className={s.loginPanel} aria-labelledby="login-title">
+          <span className={s.panelLabel}>01 / АВТОРИЗАЦІЯ</span>
+          <h2 id="login-title">Вхід у кабінет</h2>
+          <p className={s.panelDescription}>Введіть дані вашого облікового запису.</p>
+          <EnterForm />
+          <p className={s.support}>Немає доступу? Зверніться до адміністратора.</p>
+        </section>
+      </main>
+      <footer className={s.footer}><span>© {new Date().getFullYear()} SKIFTECH</span><span>ТЕХНОЛОГІЇ, ЩО ГОТУЮТЬ ДО РЕАЛЬНОСТІ</span></footer>
+    </div>
   );
 };
 

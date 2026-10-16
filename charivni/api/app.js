@@ -1,77 +1,36 @@
-import express from "express";
-import cors from "cors";
-import { productsRouter } from "./products/routes.js";
-import { usersRouter } from "./users/routes.js";
-import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
-import { ordersRouter } from "./orders/routes.js";
-import { blogRouter } from "./blog/routes.js";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import authMiddleware from "./middlewares/auth-middleware.js";
-
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import { adminRouter, mediaRouter } from './admin/routes.js';
+import { usersRouter } from './users/routes.js';
+import authMiddleware from './middlewares/auth-middleware.js';
+import { pathToFileURL } from 'url';
 
 dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export const app = express();
 const PORT = process.env.PORT || 4000;
 
+app.use(cors({ credentials: true, origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
 app.use(express.json());
-app.use(cookieParser())
-app.use(cors({
-  credentials: true,
-  origin: process.env.CLIENT_URL
-}));
+app.use(cookieParser());
+app.use('/users', usersRouter);
+app.use('/admin', adminRouter);
+app.use('/media', mediaRouter);
 
-app.use("/products", productsRouter);
-app.use("/users", usersRouter);
-app.use("/orders", ordersRouter);
-app.use("/blog", blogRouter);
-
-app.get("/", (req, res) => {
-  res.send("API charivnyci-dobra");
-});
-
-const UPLOADS_DIR = path.join(__dirname, "uploads");
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR);
+// These sections will receive their own MongoDB repositories later.
+for (const route of ['/products', '/orders', '/blog']) {
+  app.get(route, authMiddleware, (req, res) => res.json([]));
+  app.use(route, authMiddleware, (req, res) => res.status(501).json({ message: 'Розділ поки не підключено.' }));
 }
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, UPLOADS_DIR);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
+app.get('/', (req, res) => res.json({ name: 'SKIFTECH API', storage: 'memory' }));
+app.use((req, res) => res.status(404).json({ message: 'Маршрут не знайдено.' }));
+app.use((error, req, res, next) => {
+  res.status(error.status || 500).json({ message: error.status === 400 ? 'Некоректний запит.' : 'Внутрішня помилка сервера.' });
 });
 
-const upload = multer({ storage });
-
-// Маршрут для загрузки файла
-app.post("/upload", upload.single("file"), (req, res) => {
-
-  if (!req.file) {
-    return res.status(400).send("No file uploaded.");
-  }
-  const fileUrl = `https://api.charivnyci-dobra.com.ua/uploads/${req.file.filename}`;
-  res.status(200).json({ fileUrl });
-});
-
-// Маршрут для доступа к загруженным файлам
-app.use("/uploads", express.static(UPLOADS_DIR));
-const start = async () => {
-  try {
-    app.listen(PORT, () => console.log(`Server started on PORT = ${PORT}`));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-start();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  app.listen(PORT, () => console.log(`Server started on PORT = ${PORT}`));
+}

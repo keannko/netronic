@@ -1,82 +1,32 @@
-.form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 40px;
-    gap: 10px;
+.form { display: flex; flex-direction: column; gap: 22px; margin-top: 32px; }
+.form_input {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  &_label { font-size: 13px; font-weight: 700; color: #303036; }
+  &_text {
+    width: 100%;
+    min-width: 0;
+    height: 52px;
+    padding: 0 15px;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid #dcdce0;
+    border-radius: 2px;
+    background: #f8f8f9;
+    color: #151517;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    &::placeholder { color: #98989f; }
+    &:focus { outline: none; border-color: #d9252a; box-shadow: 0 0 0 3px #e5252912; }
   }
-  
-  .form_input {
-    display: flex;
-    flex-direction: column;
-    font-family: "Gilroy";
-    font-size: 18px;
-    font-weight: 500;
-    color: #605f5f;
-    width: 500px;
-    height: 90px;
-    &_label {
-      margin-bottom: 10px;
-    }
-    &_text {
-      font-family: "Gilroy";
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 16px;
-      color: #b69292;
-      padding: 10px 16px;
-      border-radius: 12px;
-      background: #f9f1f3;
-      border: none;
-    }
-  }
-  
-  @media (max-width: 520px) {
-    .form_input {
-      width: 320px;
-    }
-  }
-  
-  .error {
-    color: red;
-    font-family: "Gilroy";
-    font-size: 12px;
-    font-weight: 400;
-  }
-  
-  .buttonsBlock {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    margin: 10px 0 40px 0;
-    &_button1 {
-      color: #e77584;
-      font-family: Gilroy;
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      border: none;
-      background-color: white;
-      cursor: pointer;
-    }
-    &_button2 {
-      color: #fff;
-      font-family: Gilroy;
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 0.9px;
-      border-radius: 16px;
-      border: navajowhite;
-      background-color: #e77584;
-      padding: 16px 32px;
-      cursor: pointer;
-    }
-  }
-  
-  @media (max-width: 520px) {
-    .buttonsBlock {
-      margin: 10px 0 50px 0;
-      &_button2 {
-        padding: 8px 15px;
-      }
-    }
-  }
+}
+.passwordField { position: relative; }
+.passwordField input { padding-right: 54px; }
+.passwordToggle { position: absolute; right: 4px; top: 4px; width: 44px; height: 44px; display: grid; place-items: center; background: transparent; color: #77777f; border: none; cursor: pointer; }
+.submitButton { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 52px; padding: 0 20px; margin-top: 6px; border: 0; border-radius: 2px; background: #df252b; color: white; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.submitButton:hover { background: #bd1b20; }
+.submitButton:disabled { opacity: 0.6; cursor: wait; }
+.submitButton span { font-size: 23px; }
+.submitButton:focus-visible, .passwordToggle:focus-visible { outline: 2px solid #df252b; outline-offset: 4px; }
+.error { color: #bb2026; font-size: 12px; line-height: 1.4; }
+.message { font-size: 13px; line-height: 1.5; color: #67676e; }
