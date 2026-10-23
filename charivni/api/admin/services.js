@@ -1,7 +1,26 @@
 import bcrypt from 'bcryptjs';
-import { getAllUsersDataAccess, getUserDataAccess, createUserDataAccess, updateUserDataAccess, createBirthdayDataAccess, deleteBirthdayDataAccess, getCategoryImagesDataAccess, createCategoryImageDataAccess, deleteCategoryImageDataAccess } from '../users/dataAccess.js';
+import { getAllUsersDataAccess, getUserDataAccess, createUserDataAccess, updateUserDataAccess, createBirthdayDataAccess, deleteBirthdayDataAccess, getCategoryImagesDataAccess, createCategoryImageDataAccess, deleteCategoryImageDataAccess, getAdminLinksDataAccess, createAdminLinkDataAccess, updateAdminLinkDataAccess, deleteAdminLinkDataAccess } from '../users/dataAccess.js';
 import { publicUser, fail, validateProfile, getAllUsersService, getWorkHoursService, getWorkdayEntriesService, createWorkdayEntryService } from '../users/services.js';
 import { removeUserTokens } from '../services/token-service.js';
+
+export const getAdminLinksService = userID => getAdminLinksDataAccess(userID);
+const validateAdminLink = ({ title, url } = {}) => {
+  if (typeof title !== 'string' || !title.trim() || title.trim().length > 100 || typeof url !== 'string' || url.length > 2048) fail('Вкажіть назву та коректне посилання.', 400);
+  let parsed;
+  try { parsed = new URL(url.trim()); } catch { fail('Вкажіть коректне посилання.', 400); }
+  if (!['http:', 'https:'].includes(parsed.protocol) || !parsed.hostname) fail('Посилання має починатися з http:// або https://.', 400);
+  return { title: title.trim(), url: parsed.href };
+};
+export const createAdminLinkService = (userID, values) => createAdminLinkDataAccess(userID, validateAdminLink(values));
+export const updateAdminLinkService = async (userID, id, values) => {
+  const link = await updateAdminLinkDataAccess(userID, id, validateAdminLink(values));
+  if (!link) fail('Посилання не знайдено.', 404);
+  return link;
+};
+export const deleteAdminLinkService = async (userID, id) => {
+  if (!await deleteAdminLinkDataAccess(userID, id)) fail('Посилання не знайдено.', 404);
+  return { message: 'Посилання видалено.' };
+};
 
 export const saveUserService = async (id, values = {}) => {
   const current = id ? await getUserDataAccess(id) : null;
@@ -36,10 +55,12 @@ export const deleteBirthdayService = async id => {
   if (!await deleteBirthdayDataAccess(id)) fail('Запис не знайдено.', 404);
   return { message: 'День народження видалено.' };
 };
-export const categories = ['РПС', 'Жилеты', 'Повязки', 'Halo', 'Прочее'];
-export const getCategoryImagesService = async () => getCategoryImagesDataAccess();
+export const categories = ['РПС', 'Жилеты', 'Повязки', 'Halo', 'Інше'];
+const normalizeCategory = category => category === 'Прочее' ? 'Інше' : category;
+export const getCategoryImagesService = async () => (await getCategoryImagesDataAccess()).map(image => ({ ...image, category: normalizeCategory(image.category) }));
 export const uploadCategoryImageService = async (category, file) => {
-  if (!categories.includes(category) || !file) fail('Оберіть розділ та зображення.', 400);
+  const normalizedCategory = normalizeCategory(category);
+  if (!categories.includes(normalizedCategory) || !file) fail('Оберіть розділ та зображення.', 400);
   const bytes = file.buffer;
   let mime;
   if (bytes.length >= 8 && bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) mime = 'image/png';
@@ -47,7 +68,7 @@ export const uploadCategoryImageService = async (category, file) => {
   else if (bytes.length >= 12 && bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP') mime = 'image/webp';
   else if (bytes.length >= 6 && ['GIF87a', 'GIF89a'].includes(bytes.toString('ascii', 0, 6))) mime = 'image/gif';
   else fail('Підтримуються PNG, JPEG, WebP та GIF.', 400);
-  return createCategoryImageDataAccess({ category, name: file.originalname, source: `data:${mime};base64,${bytes.toString('base64')}` });
+  return createCategoryImageDataAccess({ category: normalizedCategory, name: file.originalname, source: `data:${mime};base64,${bytes.toString('base64')}` });
 };
 export const deleteCategoryImageService = async id => {
   if (!await deleteCategoryImageDataAccess(id)) fail('Зображення не знайдено.', 404);

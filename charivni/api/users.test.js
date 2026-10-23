@@ -40,6 +40,21 @@ test('employee hours and account settings are authenticated and persist in memor
     assert.equal(session.user.lastName, 'Петренко');
     assert.equal(session.user.grade, 0);
     const headers = { Authorization: `Bearer ${session.accessToken}`, 'Content-Type': 'application/json' };
+    assert.equal((await request('/users/avatar', { method: 'POST' })).status, 401);
+    const image = new FormData();
+    image.append('file', new Blob([Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aZfoAAAAASUVORK5CYII=', 'base64')], { type: 'image/png' }), 'avatar.png');
+    const uploaded = await request('/users/avatar', { method: 'POST', headers: { Authorization: headers.Authorization }, body: image });
+    assert.equal(uploaded.status, 200);
+    assert.match((await uploaded.json()).avatar, /^data:image\/png;base64,/);
+    assert.match((await (await request('/users/bytoken', { headers })).json()).avatar, /^data:image\/png;base64,/);
+    const invalidImage = new FormData();
+    invalidImage.append('file', new Blob(['not an image']), 'bad.png');
+    assert.equal((await request('/users/avatar', { method: 'POST', headers: { Authorization: headers.Authorization }, body: invalidImage })).status, 400);
+    const adminSession = await (await login('admin@gmail.com', '123')).json();
+    const adminHeaders = { Authorization: `Bearer ${adminSession.accessToken}`, 'Content-Type': 'application/json' };
+    const adminSettings = await request('/users/settings', { method: 'PATCH', headers: adminHeaders, body: JSON.stringify({ email: 'admin@gmail.com', currentPassword: '123', firstName: 'Іван', lastName: 'Адміністратор' }) });
+    assert.equal(adminSettings.status, 200);
+    assert.equal((await adminSettings.json()).user.role, 'admin');
     const birthdaysResponse = await request('/users/birthdays', { headers });
     assert.equal(birthdaysResponse.status, 200);
     const birthdays = await birthdaysResponse.json();
@@ -61,6 +76,7 @@ test('employee hours and account settings are authenticated and persist in memor
     assert.equal(data.user.role, 'user');
     assert.equal(data.user.grade, 0);
     assert.equal(data.user.password, undefined);
+    assert.match(data.user.avatar, /^data:image\/png;base64,/);
     assert.equal((await request('/users/hours', { headers })).status, 401);
     assert.equal((await login('user1@gmail.com', '123')).status, 401);
     assert.equal((await login('updated@gmail.com', '123')).status, 401);
@@ -71,6 +87,9 @@ test('employee hours and account settings are authenticated and persist in memor
     const emailOnly = await request('/users/settings', { method: 'PATCH', headers: { Authorization: `Bearer ${current.accessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'user1@gmail.com', currentPassword: '456', newPassword: '' }) });
     assert.equal(emailOnly.status, 200);
     assert.equal((await login('user1@gmail.com', '456')).status, 200);
+    const removedAvatar = await request('/users/avatar', { method: 'DELETE', headers: { Authorization: `Bearer ${(await emailOnly.json()).accessToken}` } });
+    assert.equal(removedAvatar.status, 200);
+    assert.equal((await removedAvatar.json()).avatar, '');
   } finally {
     server.closeAllConnections();
     await new Promise(resolve => server.close(resolve));

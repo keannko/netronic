@@ -7,23 +7,54 @@ import { fileURLToPath } from 'url';
 // Local persistence until MongoDB is connected. Tests use isolated memory by default.
 const storagePath = process.env.SKIFTECH_STORAGE_FILE || (process.env.NODE_TEST_CONTEXT ? null : fileURLToPath(new URL('../.local/data.json', import.meta.url)));
 const stored = storagePath && fs.existsSync(storagePath) ? JSON.parse(fs.readFileSync(storagePath, 'utf8')) : {};
+const production = process.env.NODE_ENV === 'production' && !process.env.NODE_TEST_CONTEXT;
+if (production && !process.env.SKIFTECH_STORAGE_FILE) throw new Error('Set SKIFTECH_STORAGE_FILE to a persistent writable path before starting production.');
+if (production && !stored.users?.length && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(process.env.SKIFTECH_ADMIN_EMAIL || '') || (process.env.SKIFTECH_ADMIN_PASSWORD || '').length < 12)) {
+  throw new Error('Set SKIFTECH_ADMIN_EMAIL and a SKIFTECH_ADMIN_PASSWORD of at least 12 characters to create the first admin.');
+}
 const saveStorage = () => {
   if (!storagePath) return;
   fs.mkdirSync(path.dirname(storagePath), { recursive: true });
   const temporaryPath = storagePath + '.tmp';
-  fs.writeFileSync(temporaryPath, JSON.stringify({ users, birthdays, categoryImages, workdayEntries }, null, 2));
+  fs.writeFileSync(temporaryPath, JSON.stringify({ users, birthdays, categoryImages, workdayEntries, adminLinks }, null, 2));
   fs.renameSync(temporaryPath, storagePath);
 };
 
 // Replace this repository with MongoDB when needed.
 const password = bcrypt.hashSync('123', 10);
-const seedUsers = [
+const seedUsers = production ? (stored.users?.length ? [] : [{ userID: randomUUID(), email: process.env.SKIFTECH_ADMIN_EMAIL.trim().toLowerCase(), name: 'Адміністратор', role: 'admin', grade: 0, password: bcrypt.hashSync(process.env.SKIFTECH_ADMIN_PASSWORD, 12) }]) : [
   { userID: '1', email: 'admin@gmail.com', name: 'Адміністратор', role: 'admin', password },
   { userID: '2', email: 'user1@gmail.com', name: 'Петренко Іван', lastName: 'Петренко', firstName: 'Іван', grade: 0, role: 'user', password },
   { userID: '3', email: 'user2@gmail.com', name: 'Коваленко Олександр', lastName: 'Коваленко', firstName: 'Олександр', grade: 0, role: 'user', password },
 ];
 
-const users = stored.users || seedUsers;
+const users = stored.users?.length ? stored.users : seedUsers;
+if (production && users.some(user => /@example\.test$/i.test(user.email) || bcrypt.compareSync('123', user.password))) {
+  throw new Error('Replace demo accounts and default passwords in the storage file before starting production.');
+}
+const adminLinks = stored.adminLinks || [];
+
+export const getAdminLinksDataAccess = async userID => adminLinks.filter(link => link.userID === userID);
+export const createAdminLinkDataAccess = async (userID, values) => {
+  const link = { id: randomUUID(), userID, ...values };
+  adminLinks.push(link);
+  saveStorage();
+  return link;
+};
+export const updateAdminLinkDataAccess = async (userID, id, values) => {
+  const link = adminLinks.find(item => item.userID === userID && item.id === id);
+  if (!link) return null;
+  Object.assign(link, values);
+  saveStorage();
+  return link;
+};
+export const deleteAdminLinkDataAccess = async (userID, id) => {
+  const index = adminLinks.findIndex(link => link.userID === userID && link.id === id);
+  if (index < 0) return false;
+  adminLinks.splice(index, 1);
+  saveStorage();
+  return true;
+};
 
 export const loginUserDataAccess = async email => users.find(user => user.email === email);
 export const getAllUsersDataAccess = async () => users;
@@ -105,6 +136,7 @@ export const deleteCategoryImageDataAccess = async id => {
   return true;
 };
 const workdayEntries = stored.workdayEntries || [];
+if (production && !stored.users?.length) saveStorage();
 export const getWorkdayEntriesDataAccess = async userID => workdayEntries.filter(entry => entry.userID === userID);
 export const createWorkdayEntryDataAccess = async (userID, values) => {
   const entry = { id: randomUUID(), userID, ...values, createdAt: new Date().toISOString() };

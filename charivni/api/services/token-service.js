@@ -4,6 +4,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+if (process.env.NODE_ENV === 'production' && !process.env.NODE_TEST_CONTEXT &&
+  (!process.env.JWT_ACCESS_SECRET || process.env.JWT_ACCESS_SECRET.length < 32 || !process.env.JWT_REFRESH_SECRET || process.env.JWT_REFRESH_SECRET.length < 32 || process.env.JWT_ACCESS_SECRET === process.env.JWT_REFRESH_SECRET)) {
+  throw new Error('Set two different JWT_ACCESS_SECRET and JWT_REFRESH_SECRET values of at least 32 characters for production.');
+}
+
 const accessSecret = process.env.JWT_ACCESS_SECRET || randomBytes(32).toString('hex');
 const refreshSecret = process.env.JWT_REFRESH_SECRET || randomBytes(32).toString('hex');
 const sessions = new Map();

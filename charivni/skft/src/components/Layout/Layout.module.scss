@@ -1,0 +1,18 @@
+.layoutWrapper {
+  background-image: url("/graffiti-dashboard.png");
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 900px;
+}
+
+@media (max-width: 1473px) {
+  .layoutWrapper {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 1) 100%
+      ),
+      url("/graffiti-dashboard.png");
+  }
+}

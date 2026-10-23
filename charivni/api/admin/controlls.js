@@ -21,6 +21,10 @@ export const updateUserController = async (req, res) => {
   }
 };
 export const getTimesheetController = handle(() => services.getTimesheetService());
+export const getLinksController = handle(req => services.getAdminLinksService(req.user.userID));
+export const createLinkController = handle(req => services.createAdminLinkService(req.user.userID, req.body), 201);
+export const updateLinkController = handle(req => services.updateAdminLinkService(req.user.userID, req.params.id, req.body));
+export const deleteLinkController = handle(req => services.deleteAdminLinkService(req.user.userID, req.params.id));
 export const saveWorkdayController = handle(req => services.saveUserWorkdayService(req.params.id, req.body));
 export const createBirthdayController = handle(req => services.createBirthdayService(req.body), 201);
 export const deleteBirthdayController = handle(req => services.deleteBirthdayService(req.params.id));

@@ -1,4 +1,4 @@
-import { getAllUsersService, getUserService, loginUserService, logoutUserService, refreshService, updateUserService, getWorkHoursService, getBirthdaysService, getWorkdayEntriesService, createWorkdayEntryService, getWorkdayCatalogService } from './services.js';
+import { getAllUsersService, getUserService, loginUserService, logoutUserService, refreshService, updateUserService, updateAvatarService, deleteAvatarService, getWorkHoursService, getBirthdaysService, getWorkdayEntriesService, createWorkdayEntryService, getWorkdayCatalogService } from './services.js';
 
 const cookieOptions = { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'lax', path: '/' };
 const sendSession = (res, data) => {
@@ -65,6 +65,14 @@ export const updateUserController = async (req, res) => {
   } catch (error) {
     return sendError(res, error);
   }
+};
+export const uploadAvatarController = async (req, res) => {
+  try { return res.json(await updateAvatarService(req.user.userID, req.file)); }
+  catch (error) { return sendError(res, error); }
+};
+export const deleteAvatarController = async (req, res) => {
+  try { return res.json(await deleteAvatarService(req.user.userID)); }
+  catch (error) { return sendError(res, error); }
 };
 
 export const getWorkHoursController = async (req, res) => {

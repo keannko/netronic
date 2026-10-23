@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { getAllUsersDataAccess, getUserDataAccess, loginUserDataAccess, updateUserDataAccess, getWorkHoursDataAccess, getEfficiencyDataAccess, getBirthdaysDataAccess, getWorkdayEntriesDataAccess, createWorkdayEntryDataAccess, getWorkdayCatalogDataAccess } from './dataAccess.js';
 import { tokenService, validateRefreshToken, removeToken, removeUserTokens } from '../services/token-service.js';
 
-export const publicUser = user => ({ userID: user.userID, email: user.email, name: user.name, role: user.role, firstName: user.firstName || "", lastName: user.lastName || "", grade: user.grade ?? 0, birthDate: user.birthDate || "", phone: user.phone || "" });
+export const publicUser = user => ({ userID: user.userID, email: user.email, name: user.name, role: user.role, firstName: user.firstName || "", lastName: user.lastName || "", grade: user.grade ?? 0, birthDate: user.birthDate || "", phone: user.phone || "", avatar: user.avatar || "" });
 export const fail = (message, status) => {
   const error = new Error(message);
   error.status = status;
@@ -64,6 +64,26 @@ export const updateUserService = async (userID, { email, currentPassword, newPas
   const updated = await updateUserDataAccess(userID, { email: normalizedEmail, password, ...profile, name: `${profile.lastName} ${profile.firstName}`.trim() || user.name });
   removeUserTokens(userID);
   return { ...await tokenService(publicUser(updated)), user: publicUser(updated) };
+};
+
+export const updateAvatarService = async (userID, file) => {
+  if (!file) fail('Оберіть зображення.', 400);
+  const bytes = file.buffer;
+  let mime;
+  if (bytes.length >= 8 && bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) mime = 'image/png';
+  else if (bytes.length >= 3 && bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255) mime = 'image/jpeg';
+  else if (bytes.length >= 12 && bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP') mime = 'image/webp';
+  else if (bytes.length >= 6 && ['GIF87a', 'GIF89a'].includes(bytes.toString('ascii', 0, 6))) mime = 'image/gif';
+  else fail('Підтримуються PNG, JPEG, WebP та GIF.', 400);
+  const user = await getUserDataAccess(userID);
+  if (!user) fail('Користувача не знайдено.', 404);
+  return publicUser(await updateUserDataAccess(userID, { avatar: `data:${mime};base64,${bytes.toString('base64')}` }));
+};
+
+export const deleteAvatarService = async userID => {
+  const user = await getUserDataAccess(userID);
+  if (!user) fail('Користувача не знайдено.', 404);
+  return publicUser(await updateUserDataAccess(userID, { avatar: '' }));
 };
 
 export const getCurrentDate = () => new Intl.DateTimeFormat('en-CA', {
